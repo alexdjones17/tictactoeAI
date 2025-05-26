@@ -4,10 +4,10 @@ BOARD_WIDTH = 3
 def new_board():
     board = []
     for i in range(0, BOARD_HEIGHT):
-        column = []
+        row = []
         for j in range(0, BOARD_WIDTH):
-            column.append(None)
-        board.append(column)
+            row.append(None)
+        board.append(row)
 
     return board
 
@@ -24,35 +24,23 @@ def render(board):
         print(line)
     print(" -------")
 
-def get_moves():
-    x = input("What is your move's X coordinate? ")
-    y = input("What is your move's Y coordinate? ")
+def get_move():
+    x = int(input("What is your move's X coordinate? "))
+    y = int(input("What is your move's Y coordinate? "))
     return [x, y]
 
-# # Go through turns until the game is over
+def make_move(player, board, move_coords):
+    if not is_valid_move(board, move_coords):
+        raise Exception("({0}, {1}) is not a valid move.".format(move_coords[0], move_coords[1]))
 
-# while True:
-#     # Define the current player
-#     current_player = ?
+    new_board = []
+    for i in range(0, BOARD_HEIGHT):
+        row = []
+        for j in range(0, BOARD_WIDTH):
+            row.append(board[i][j])
+        new_board.append(row)
+    new_board[move_coords[0]][move_coords[1]] = player
+    return new_board
 
-#     # Print the board
-#     create(board)
-
-#     # Get the move
-#     move = get_move()
-
-#     # Make the move
-#     make_move(board, move)
-
-#     # Detect a win
-#     winner = detect_winner(board)
-
-#     if winner is something:
-#         print("The winner is " + winner)
-#         break
-
-#     if is_board_full(board):
-#         print("It's a draw!")
-#         break
-
-#     # Loops until the game is over
+def is_valid_move(board, move_coords):
+    return board[move_coords[0]][move_coords[1]] == None
