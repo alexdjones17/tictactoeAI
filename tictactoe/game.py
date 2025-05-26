@@ -24,13 +24,10 @@ def render(board):
         print(line)
     print(" -------")
 
-# Test code
-board = new_board()
-board[0][0] = 'X'
-board[0][1] = 'O'
-board[0][2] = 'X'
-board[1][1] = 'O'
-render(board)
+def get_moves():
+    x = input("What is your move's X coordinate? ")
+    y = input("What is your move's Y coordinate? ")
+    return [x, y]
 
 # # Go through turns until the game is over
 
