@@ -1,3 +1,5 @@
+import ais
+
 BOARD_HEIGHT = 3
 BOARD_WIDTH = 3
 
@@ -14,15 +16,18 @@ def new_board():
 def render(board):
     print("  0 1 2")
     print(" -------")
-    for i in range(0, BOARD_WIDTH):
+    for i in range(0, BOARD_HEIGHT):
         line = "{}|".format(i)
-        for j in range(0, BOARD_HEIGHT):
+        for j in range(0, BOARD_WIDTH):
             temp = " " if board[i][j] == None else board[i][j]
             line += temp + " "
         line = line[:-1]
         line += "|"
         print(line)
     print(" -------")
+
+def switch_player(player):
+    return 'O' if player == 'X' else 'X'
 
 def get_move():
     x = int(input("What is your move's X coordinate? "))
@@ -73,37 +78,46 @@ def get_winner(board):
             return lines[i][0]
     return None
 
-def check_draw(board):
+def is_board_full(board):
     for i in range(0, BOARD_WIDTH):
         for j in range(0, BOARD_WIDTH):
             if board[i][j] == None:
                 return False
     return True
 
-board = new_board()
-player = 'X'
-
-while True:
-    # Print out the board
+def play():
+    board = new_board()
     render(board)
-
-    player = 'O' if player == 'X' else 'X'
+    current_player = 'X'
 
     while True:
-        move = get_move()
-        if not is_valid_move(board, move):
-            print("Try again")
-        else:
+        
+
+        current_player = switch_player(current_player)
+
+        # Current way of getting human input
+        # while True:
+        #     move = get_move()
+        #     if not is_valid_move(board, move):
+        #         print("Try again")
+        #     else:
+        #         break
+
+        move = ais.randomai(board, current_player)
+
+        board = make_move(current_player, board, move)
+
+        # Print out the board
+        render(board)
+        
+        winner = get_winner(board)
+
+        if winner != None:
+            print("Player {} wins!".format(winner))
             break
 
-    board = make_move(player, board, move)
-    
-    winner = get_winner(board)
+        if is_board_full(board):
+            print("Draw")
+            break
 
-    if winner != None:
-        print("Player {} wins!".format(winner))
-        break
-
-    if check_draw(board):
-        print("Draw")
-        break
+play()
